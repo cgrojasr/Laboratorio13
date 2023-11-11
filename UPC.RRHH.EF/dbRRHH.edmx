@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ddRRHHModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="area">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="empleado">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dni" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="apellido" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="fecha_contracion" Type="date" Nullable="false" />
+          <Property Name="salario" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="empleado_empleo">
+          <Key>
+            <PropertyRef Name="codigo_empleado" />
+            <PropertyRef Name="codigo_empleo" />
+          </Key>
+          <Property Name="codigo_empleado" Type="int" Nullable="false" />
+          <Property Name="codigo_empleo" Type="int" Nullable="false" />
+          <Property Name="codigo_area" Type="int" Nullable="false" />
+          <Property Name="fecha_inicio" Type="date" Nullable="false" />
+          <Property Name="fecha_final" Type="date" Nullable="false" />
+          <Property Name="activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="empleo">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="salario_minimo" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="salario_maximo" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_empleado_empleo_area">
+          <End Role="area" Type="Self.area" Multiplicity="1" />
+          <End Role="empleado_empleo" Type="Self.empleado_empleo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="area">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="empleado_empleo">
+              <PropertyRef Name="codigo_area" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_empleado_empleo_empleado">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="empleado_empleo" Type="Self.empleado_empleo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="empleado_empleo">
+              <PropertyRef Name="codigo_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_empleado_empleo_empleo">
+          <End Role="empleo" Type="Self.empleo" Multiplicity="1" />
+          <End Role="empleado_empleo" Type="Self.empleado_empleo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleo">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="empleado_empleo">
+              <PropertyRef Name="codigo_empleo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ddRRHHModelStoreContainer">
+          <EntitySet Name="area" EntityType="Self.area" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="empleado" EntityType="Self.empleado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="empleado_empleo" EntityType="Self.empleado_empleo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="empleo" EntityType="Self.empleo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_empleado_empleo_area" Association="Self.FK_empleado_empleo_area">
+            <End Role="area" EntitySet="area" />
+            <End Role="empleado_empleo" EntitySet="empleado_empleo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_empleado_empleo_empleado" Association="Self.FK_empleado_empleo_empleado">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="empleado_empleo" EntitySet="empleado_empleo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_empleado_empleo_empleo" Association="Self.FK_empleado_empleo_empleo">
+            <End Role="empleo" EntitySet="empleo" />
+            <End Role="empleado_empleo" EntitySet="empleado_empleo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ddRRHHModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="area">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="empleado_empleo" Relationship="Self.FK_empleado_empleo_area" FromRole="area" ToRole="empleado_empleo" />
+        </EntityType>
+        <EntityType Name="empleado">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dni" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_contracion" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="salario" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="empleado_empleo" Relationship="Self.FK_empleado_empleo_empleado" FromRole="empleado" ToRole="empleado_empleo" />
+        </EntityType>
+        <EntityType Name="empleado_empleo">
+          <Key>
+            <PropertyRef Name="codigo_empleado" />
+            <PropertyRef Name="codigo_empleo" />
+          </Key>
+          <Property Name="codigo_empleado" Type="Int32" Nullable="false" />
+          <Property Name="codigo_empleo" Type="Int32" Nullable="false" />
+          <Property Name="codigo_area" Type="Int32" Nullable="false" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fecha_final" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="area" Relationship="Self.FK_empleado_empleo_area" FromRole="empleado_empleo" ToRole="area" />
+          <NavigationProperty Name="empleado" Relationship="Self.FK_empleado_empleo_empleado" FromRole="empleado_empleo" ToRole="empleado" />
+          <NavigationProperty Name="empleo" Relationship="Self.FK_empleado_empleo_empleo" FromRole="empleado_empleo" ToRole="empleo" />
+        </EntityType>
+        <EntityType Name="empleo">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="salario_minimo" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="salario_maximo" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="empleado_empleo" Relationship="Self.FK_empleado_empleo_empleo" FromRole="empleo" ToRole="empleado_empleo" />
+        </EntityType>
+        <Association Name="FK_empleado_empleo_area">
+          <End Role="area" Type="Self.area" Multiplicity="1" />
+          <End Role="empleado_empleo" Type="Self.empleado_empleo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="area">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="empleado_empleo">
+              <PropertyRef Name="codigo_area" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_empleado_empleo_empleado">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="empleado_empleo" Type="Self.empleado_empleo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="empleado_empleo">
+              <PropertyRef Name="codigo_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_empleado_empleo_empleo">
+          <End Role="empleo" Type="Self.empleo" Multiplicity="1" />
+          <End Role="empleado_empleo" Type="Self.empleado_empleo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleo">
+              <PropertyRef Name="codigo" />
+            </Principal>
+            <Dependent Role="empleado_empleo">
+              <PropertyRef Name="codigo_empleo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ddRRHHEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="areas" EntityType="Self.area" />
+          <EntitySet Name="empleadoes" EntityType="Self.empleado" />
+          <EntitySet Name="empleado_empleo" EntityType="Self.empleado_empleo" />
+          <EntitySet Name="empleos" EntityType="Self.empleo" />
+          <AssociationSet Name="FK_empleado_empleo_area" Association="Self.FK_empleado_empleo_area">
+            <End Role="area" EntitySet="areas" />
+            <End Role="empleado_empleo" EntitySet="empleado_empleo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_empleado_empleo_empleado" Association="Self.FK_empleado_empleo_empleado">
+            <End Role="empleado" EntitySet="empleadoes" />
+            <End Role="empleado_empleo" EntitySet="empleado_empleo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_empleado_empleo_empleo" Association="Self.FK_empleado_empleo_empleo">
+            <End Role="empleo" EntitySet="empleos" />
+            <End Role="empleado_empleo" EntitySet="empleado_empleo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ddRRHHModelStoreContainer" CdmEntityContainer="ddRRHHEntities">
+          <EntitySetMapping Name="areas">
+            <EntityTypeMapping TypeName="ddRRHHModel.area">
+              <MappingFragment StoreEntitySet="area">
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="empleadoes">
+            <EntityTypeMapping TypeName="ddRRHHModel.empleado">
+              <MappingFragment StoreEntitySet="empleado">
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="dni" ColumnName="dni" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="fecha_contracion" ColumnName="fecha_contracion" />
+                <ScalarProperty Name="salario" ColumnName="salario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="empleado_empleo">
+            <EntityTypeMapping TypeName="ddRRHHModel.empleado_empleo">
+              <MappingFragment StoreEntitySet="empleado_empleo">
+                <ScalarProperty Name="codigo_empleado" ColumnName="codigo_empleado" />
+                <ScalarProperty Name="codigo_empleo" ColumnName="codigo_empleo" />
+                <ScalarProperty Name="codigo_area" ColumnName="codigo_area" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_final" ColumnName="fecha_final" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="empleos">
+            <EntityTypeMapping TypeName="ddRRHHModel.empleo">
+              <MappingFragment StoreEntitySet="empleo">
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="salario_minimo" ColumnName="salario_minimo" />
+                <ScalarProperty Name="salario_maximo" ColumnName="salario_maximo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
